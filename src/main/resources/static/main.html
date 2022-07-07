@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bootstrap 101 Template</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="container-fluid" id="app">
+		<div class="row">
+		 	<c_header></c_header>
+		</div>
+		
+		<div class="row" style="height:100%"> 
+  	
+		  	<div style="margin:0px;padding:0px;height:100%;float:left;" v-bind:style="{ height: menu_height + 'px', width: menu_width + 'px' }">		  		
+		  		 <c_menu v-bind:height="menu_height":width="menu_width"></c_menu>		 
+		  	</div>
+		  	
+		  	<div style="float:left;overflow:auto;" v-bind:style="{ height: content_height + 'px', width: content_width + 'px' }">	  	
+			 	<router-view></router-view>
+		  	</div>
+  	
+  		</div>
+	</div>
+
+   
+
+  </body>
+  <!-- bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+  <!-- vue -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- http vue loader -->
+  <script src="https://unpkg.com/http-vue-loader"></script>
+  <!-- router -->
+  <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+  
+
+	const router = new VueRouter({
+	  routes: [
+	      	 { path: '/foo', component: { template: '<div>foo</div>' } },
+	    	 { path: '/bar', component: { template: '<div>bar</div>' } },
+	    	 { path: '/test', component: httpVueLoader('./component/c_test.vue')},
+	    	 { path: '/bookCategoryList',component: httpVueLoader('./component/c_bookCategoryList.vue')}
+	    	]
+	})
+
+    Vue.use(httpVueLoader);
+
+    new Vue({
+        el: '#app',
+        router,
+        data:  {
+            menu_width : '',
+            menu_height : '',
+            content_width : '',
+            content_height : ''
+        },
+        components: {
+            'c_header': 'url:./component/c_header.vue',
+            'c_menu': 'url:./component/c_menu.vue'
+        },
+        
+        //在vue渲染完页面之后 会调用 这个方法
+        mounted : function(){
+        	
+        	 this.adjustWindow();
+        	 
+        	 const target = this;
+        	 window.onresize = function()  {
+        		 target.adjustWindow();   
+        		 window.setTimeout(function(){
+                	 target.adjustWindow();
+             	 },10);     
+        	 };
+        },
+        
+        methods : {
+        	
+        	adjustWindow : function(){
+        		
+        		var height = document.documentElement.clientHeight || document.body.clientHeight;
+            	var width  = document.documentElement.clientWidth || document.body.clientWidth;             
+        		
+            	this.menu_height = height - 50;
+            	this.menu_width = 200;
+            	
+            	this.content_height = height - 50;
+            	this.content_width = width - 200;
+        	}
+        	
+        }
+    })
+</script>
+    
+    
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- 先引入vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入http-vue-loader -->
+<script src="https://unpkg.com/http-vue-loader"></script>
+</head>
+<body>
+<div id="app">
+<my-component></my-component>
+</div>
+</body>
+<script>
+Vue.use(httpVueLoader);
+new Vue({
+	el:'#app',
+	data:function(){
+		return{visible:false}
+	},
+	components:{'my-component':'url:./my-component.vue'}
+})
+</script>
+</html>
